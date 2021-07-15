@@ -17,9 +17,12 @@ from telegram.ext import Updater, CallbackContext, Filters, MessageHandler, Call
 # TODO: общение, запись информации, отсылка в группу
 # TODO: ограничение по возможности использования бота в группах
 
+API_TOKEN = os.getenv('API_TOKEN')
+if not API_TOKEN:
+    API_TOKEN = open('token.txt', 'r').read().replace('\n', '').replace(' ', '')
 
 bot = Bot(
-    token=os.getenv('API_TOKEN')
+    token=API_TOKEN
 )
 
 
@@ -156,7 +159,7 @@ def start() -> None:
         format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
     updater = Updater(
-        token=os.getenv('API_TOKEN'),
+        token=API_TOKEN if API_TOKEN else open('token.txt', 'r').read().replace('\n', '').replace(' ', ''),
         use_context=True
     )
     updater.dispatcher.add_handler(CallbackQueryHandler(callback=handle_query))
